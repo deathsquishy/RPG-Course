@@ -7,7 +7,6 @@ public class Mover : MonoBehaviour
 {
     //config
     [SerializeField] Transform target;
-    Ray lastRay;
 
     //cache
     [SerializeField] NavMeshAgent myNavMeshAgent;
@@ -20,20 +19,22 @@ public class Mover : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            lastRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        }
-        Debug.DrawRay(lastRay.origin, lastRay.direction * 100);
-
-        //sends player off to target destination if it is not empty
-        if (target != null) { myNavMeshAgent.destination = target.position; }
+        if (Input.GetMouseButtonDown(0)) { MoveToCursor(); }
     }
 
     //Custom Functions
-    private void CacheRefrences()
+    private void MoveToCursor()
     {
-        myNavMeshAgent = GetComponent<NavMeshAgent>();
+        //sends out raycast, gets needed quardinates
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit);
+
+        //sends player to point in terrain that the player clicked
+        if (hasHit) { myNavMeshAgent.destination = hit.point; }
     }
+
+    private void CacheRefrences()
+    { myNavMeshAgent = GetComponent<NavMeshAgent>(); }
 
 }
