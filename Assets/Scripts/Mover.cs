@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class Mover : MonoBehaviour
 {
     //config
-    [SerializeField] Transform target;
 
     //cache
     [SerializeField] NavMeshAgent myNavMeshAgent;
